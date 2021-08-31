@@ -18,7 +18,7 @@ class Model
 
   protected bool $timestamps = true;
 
-  protected string $statament;
+  protected string $query;
 
   protected $params = null;
 
@@ -30,7 +30,11 @@ class Model
 
   protected string $offset = '';
 
-  protected ?PDOException $error;
+  protected string $where = '';
+
+  protected string $join = '';
+
+  protected ?PDOException $error = null;
 
   protected  ?object $data;
 
@@ -71,30 +75,53 @@ class Model
   }
 
   public function error() {
-    return $this->error;
+    return $this->error? $this->error: false;
   }
 
   public function select(array $columns = ["*"]): Model
   {
-    $this->statament = "SELECT ".implode(",", $columns)." FROM $this->table";
+    $this->query = "SELECT ".implode(",", $columns)." FROM $this->table";
+    return $this;
+  }
+
+  public function selectRaw(string $select): Model
+  {
+    $this->query = "SELECT {$select} FROM {$this->table}";
     return $this;
   }
 
 
   public function find(?string $terms = '', ?string $params = null, string $columns = "*"): Model {
     if (!empty($terms)) {
-      $this->statament = "SELECT {$columns} FROM {$this->table} where {$terms}";
+      $this->query = "SELECT {$columns} FROM {$this->table} where {$terms}";
       parse_str($params, $this->params);
       return $this;
     }
 
-    $this->statament = "SELECT {$columns} from {$this->table}";
+    $this->query = "SELECT {$columns} from {$this->table}";
     return $this;
   }
 
   public function findById(int $id, string $columns = "*"): ?Model
   {
     return $this->find("{$this->primary} = :id", "id={$id}", $columns)->fetch();
+  }
+
+  public function where(string $field, string $param, ?string $value = null): ?Model
+  {
+    if (empty($value)) {
+      $value = $param;
+      $param = '=';
+    }
+    if (empty($this->where)) {
+      $this->where = " WHERE {$field} {$param} :".str_replace(".", "_", $field);
+    } else {
+      $this->where .= " AND {$field} {$param} :".str_replace(".", "_", $field);
+    }
+    $params = "{$field}={$value}";
+    $this->setPrams($params);
+    parse_str($params, $this->params);
+    return $this;
   }
 
   public function group(string $column): ?Model
@@ -124,8 +151,8 @@ class Model
   {
 
     try {
-      $stmt = Connection::getInstance()->prepare($this->statament . $this->group . $this->order . $this->limit . $this->offset);
-
+      $stmt = Connection::getInstance()->prepare($this->query . $this->join . $this->where . $this->group . $this->order . $this->limit . $this->offset);
+      print_r($stmt);
       $stmt->execute($this->params);
 
       if (!$stmt->rowCount()) {
@@ -146,9 +173,30 @@ class Model
 
   public function count(): int
   {
-    $stmt = Connection::getInstance()->prepare($this->statament);
+    $stmt = Connection::getInstance()->prepare($this->query);
     $stmt->execute($this->params);
     return $stmt->rowCount();
+  }
+
+  public function join(string $table, string $columnJoin, string $param, string $columnTable, ?string $tabledefault = null): ?Model
+  {
+    if (empty($tabledefault)) {
+      $tabledefault = $this->table;
+    }
+    $this->join .= " INNER JOIN {$table} ON {$table}.{$columnJoin} {$param} {$tabledefault}.{$columnTable}";
+    return $this;
+  }
+
+  public function leftJoin(string $table, string $columnJoin, string $param, string $columnTable): ?Model
+  {
+    $this->join = " LEFT OUTER JOIN {$table} ON {$table}.{$columnJoin} {$param} {$this->table}.{$columnTable}";
+    return $this;
+  }
+
+  public function rightJoin(string $table, string $columnJoin, string $param, string $columnTable): ?Model
+  {
+    $this->join = " RIGHT OUTER JOIN {$table} ON {$table}.{$columnJoin} {$param} {$this->table}.{$columnTable}";
+    return $this;
   }
 
   public function save()
@@ -219,5 +267,14 @@ class Model
     $camelcase = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     $camelcase[0] = strtolower($camelcase[0]);
     return $camelcase;
+  }
+
+  private function setPrams(string &$params)
+  {
+    if (!empty($this->params)) {
+      foreach($this->params as $key => $value) {
+        $params .= "&{$key}={$value}";
+      }
+    }
   }
 }
