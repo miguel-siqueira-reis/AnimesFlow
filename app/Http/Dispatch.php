@@ -27,7 +27,7 @@ class Dispatch
   public function __construct(string $base_url, $group = '')
   {
     $this->baseUrl =(substr($base_url, "-1") == "/" ? substr($base_url, 0, -1) : $base_url);
-    $this->request = new Request();
+    $this->request = new Request($this);
     $this->group = $group ?? '';
     $this->setPrefix();
   }

@@ -4,18 +4,29 @@ namespace App\Http;
 
 class Request {
   protected string $uri;
+  protected Dispatch $router;
   protected string $httpMethod;
   protected array $queryParams;
   protected array $postVars;
   protected array $headers;
 
-  public function __construct()
+  public function __construct(Dispatch $router)
   {
     $this->setUri();
     $this->httpMethod = $_SERVER['REQUEST_METHOD'] ?? '';
+    $this->router = $router;
     $this->queryParams = $_GET ?? [];
     $this->postVars = $_POST ?? [];
     $this->headers = getallheaders() ?? [];
+  }
+
+
+  /**
+   * @return Router
+   */
+  public function getRouter(): Router
+  {
+    return $this->router;
   }
 
   public function setUri()
