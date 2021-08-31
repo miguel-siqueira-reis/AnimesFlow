@@ -1,0 +1,23 @@
+{
+  "name": "miguel/animesflow",
+  "description": "site de animes gratis criado para testes",
+  "minimum-stability": "alpha",
+  "license": "MTI",
+  "authors": [
+    {
+      "name": "miguel",
+      "email": "miguel.siqueira.reis@gmail.com"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "App\\": "./app"
+    },
+  },
+
+  "require": {
+    "twig/twig": "^3.0",
+    "matthiasmullie/minify": "^1.3"
+  }
+}
