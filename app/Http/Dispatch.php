@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use ReflectionClass;
+use ReflectionFunction;
+
 class Dispatch
 {
   use RouterTrait;
@@ -23,7 +26,7 @@ class Dispatch
 
   public function __construct(string $base_url, $group = '')
   {
-    $this->baseUrl =(substr($base_url, "-1") == "/" ? substr($base_url, 0, -1) : $base_url);;
+    $this->baseUrl =(substr($base_url, "-1") == "/" ? substr($base_url, 0, -1) : $base_url);
     $this->request = new Request();
     $this->group = $group ?? '';
     $this->setPrefix();
@@ -52,7 +55,12 @@ class Dispatch
 
     if ($this->route) {
       if (is_callable($this->route['handler'])) {
-        call_user_func_array($this->route['handler'], ($this->route['data']? $this->route['data']: []));
+        $reflection = new ReflectionFunction($this->route['handler']);
+        foreach ($reflection->getParameters() as $params) {
+          $name = $params->getName();
+          $args[] = $this->route['data'][$name];
+        }
+        call_user_func_array($this->route['handler'], ($args ?? []));
         return true;
       }
       $controller = $this->route['handler'];
@@ -60,7 +68,12 @@ class Dispatch
       if (class_exists($controller)) {
         $newController = new $controller();
         if (method_exists($controller, $method)) {
-          call_user_func_array(array($newController, $method), ($this->route['data']? $this->route['data']: []));
+          $reflection = new ReflectionClass($this->route['handler']);
+          foreach ($reflection->getMethod($this->route['action'])->getParameters() as $params) {
+            $name = $params->getName();
+            $args[] = $this->route['data'][$name];
+          }
+          call_user_func_array(array($newController, $method), ($args ?? []));
           return true;
         }
         $this->error = self::METHOD_NOT_ALLOWED;

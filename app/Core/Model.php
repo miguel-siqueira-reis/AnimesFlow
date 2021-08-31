@@ -152,7 +152,6 @@ class Model
 
     try {
       $stmt = Connection::getInstance()->prepare($this->query . $this->join . $this->where . $this->group . $this->order . $this->limit . $this->offset);
-      print_r($stmt);
       $stmt->execute($this->params);
 
       if (!$stmt->rowCount()) {

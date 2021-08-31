@@ -26,6 +26,7 @@ trait RouterTrait
     }
 
     $data = $this->data;
+    $data['request'] = $this->request;
 
     $router = function() use ($method, $route, $callback, $data, $name) {
       return [

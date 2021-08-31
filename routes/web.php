@@ -12,8 +12,6 @@ $router->dispatch();
 
 $err = $router->getError();
 
-print_r($err);
-
 if ($err) {
     $router->redirect('error', ['errorCode' => $err]);
 }
