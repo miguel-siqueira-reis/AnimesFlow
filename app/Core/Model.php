@@ -20,7 +20,7 @@ class Model
 
   protected string $query;
 
-  protected $params = null;
+  protected ?array $params = null;
 
   protected string $group = '';
 
@@ -64,7 +64,7 @@ class Model
     return ($this->data->$name ?? null);
   }
 
-  public function columns($mode = PDO::FETCH_OBJ) {
+  public function columns($mode = PDO::FETCH_OBJ): array {
     $stmt = Connection::getInstance()->prepare("DESCRIBE {$this->table}");
     $stmt->execute($this->params);
     return $stmt->fetchAll($mode);
@@ -199,14 +199,14 @@ class Model
     return $this;
   }
 
-  public function save()
+  public function save(): bool
   {
     $primary = $this->primary;
     $id = null;
 
     try {
       if (!$this->required()) {
-        throw new \Exception("preencha os campos necessarios");
+        throw new \Exception("Preencha os campos necessarios");
       }
 
       if (!empty($this->data->$primary)) {
@@ -256,7 +256,7 @@ class Model
     return true;
   }
 
-  public function safe()
+  public function safe(): array
   {
     $safe = (array)$this->data;
     unset($safe[$this->primary]);
