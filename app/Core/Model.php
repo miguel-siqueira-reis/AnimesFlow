@@ -114,11 +114,12 @@ class Model
       $param = '=';
     }
     if (empty($this->where)) {
-      $this->where = " WHERE {$field} {$param} :".str_replace(".", "_", $field);
+      $this->where = " WHERE {$field} {$param} :".str_replace(".", "_", mb_strtolower($field));
     } else {
-      $this->where .= " AND {$field} {$param} :".str_replace(".", "_", $field);
+      $this->where .= " AND {$field} {$param} :".str_replace(".", "_", mb_strtolower($field));
     }
-    $params = "{$field}={$value}";
+
+    $params = str_replace(".", "_", mb_strtolower($field))."={$value}";
     $this->setPrams($params);
     parse_str($params, $this->params);
     return $this;
@@ -152,6 +153,7 @@ class Model
 
     try {
       $stmt = Connection::getInstance()->prepare($this->query . $this->join . $this->where . $this->group . $this->order . $this->limit . $this->offset);
+      print_r($stmt);
       $stmt->execute($this->params);
 
       if (!$stmt->rowCount()) {
