@@ -10,29 +10,29 @@ class Router extends Dispatch
     parent::__construct($base_url, $group);
   }
 
-  public function get($route, $callback, string $name = null): void
+  public function get($route, $callback, string $name = null, $middleware = []): void
   {
-    $this->addRoute("GET", $route, $callback, $name);
+    $this->addRoute("GET", $route, $callback, $name, $middleware);
   }
 
-  public function post($route, $callback, string $name=null): void
+  public function post($route, $callback, string $name = null, $middleware = []): void
   {
-    $this->addRoute("POST", $route, $callback, $name);
+    $this->addRoute("POST", $route, $callback, $name, $middleware);
   }
 
-  public function put($route, $callback, string $name= null): void
+  public function put($route, $callback, string $name = null, $middleware = []): void
   {
-    $this->addRoute("PUT", $route, $callback, $name);
+    $this->addRoute("PUT", $route, $callback, $name, $middleware);
   }
 
-  public function patch($route, $callback, string $name= null): void
+  public function patch($route, $callback, string $name = null, $middleware = []): void
   {
-    $this->addRoute("PATCH", $route, $callback, $name);
+    $this->addRoute("PATCH", $route, $callback, $name, $middleware);
   }
 
-  public function delete($route, $callback, string $name= null): void
+  public function delete($route, $callback, string $name = null, $middleware = []): void
   {
-    $this->addRoute("DELETE", $route, $callback, $name);
+    $this->addRoute("DELETE", $route, $callback, $name, $middleware);
   }
 
   public function group($groupName, $callback)

@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Queue;
 use ReflectionClass;
 use ReflectionFunction;
 
@@ -60,7 +61,9 @@ class Dispatch
           $name = $params->getName();
           $args[] = $this->route['data'][$name];
         }
-        call_user_func_array($this->route['handler'], ($args ?? []));
+
+        (new Queue($this->route['middleware'], $this->route['handler'], $args ?? []))->next($this->request);
+//        call_user_func_array($this->route['handler'], ($args ?? []));
         return true;
       }
       $controller = $this->route['handler'];
@@ -73,7 +76,8 @@ class Dispatch
             $name = $params->getName();
             $args[] = $this->route['data'][$name];
           }
-          call_user_func_array(array($newController, $method), ($args ?? []));
+          (new Queue($this->route['middleware'], $newController, $args ?? [], $method))->next($this->request);
+//          call_user_func_array(array($newController, $method), ($args ?? []));
           return true;
         }
         $this->error = self::METHOD_NOT_ALLOWED;

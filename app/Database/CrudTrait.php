@@ -1,9 +1,8 @@
 <?php
 
 
-namespace App\Core;
-
-
+namespace App\Database;
+;
 use DateTime;
 
 trait CrudTrait

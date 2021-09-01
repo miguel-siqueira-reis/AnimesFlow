@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Database\Connection;
+use App\Database\CrudTrait;
 use PDO;
 use \PDOException;
 

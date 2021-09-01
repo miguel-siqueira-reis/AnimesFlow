@@ -16,6 +16,7 @@ class Response {
         $this->httpCode = $httpCode;
         $this->content = $content;
         $this->setContentType($contentType);
+        $this->sendResponse();
     }
 
     /**
@@ -41,7 +42,7 @@ class Response {
         }
     }
 
-    public function sendResponse(): void
+    public function sendResponse()
     {
         $this->sendHeaders();
 

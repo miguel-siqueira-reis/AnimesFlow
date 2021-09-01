@@ -9,7 +9,7 @@ trait RouterTrait
 
   protected $data;
 
-  protected function addRoute(string $method, string $route, $callback, string $name = null): void
+  protected function addRoute(string $method, string $route, $callback, string $name = null, $middleware = []): void
   {
     if ($route == "/") {
       $this->addRoute($method, "", $callback, $name);
@@ -28,14 +28,15 @@ trait RouterTrait
     $data = $this->data;
     $data['request'] = $this->request;
 
-    $router = function() use ($method, $route, $callback, $data, $name) {
+    $router = function() use ($method, $route, $callback, $data, $name, $middleware) {
       return [
         'name' => $name,
         'route' => $route,
         'method' => $method,
         'handler' => $this->getHandler($callback),
         'action' => $this->getAction($callback),
-        'data' => $data
+        'data' => $data,
+        'middleware' => $middleware
       ];
     };
 

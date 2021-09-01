@@ -36,6 +36,7 @@ function generete($pathRsources, $pathPublic, $scandir, $minify) {
     }
     $oldFile = $pathRsources.$dir;
     if (is_file($oldFile) && (pathinfo($oldFile)["extension"] == 'js' or pathinfo($oldFile)["extension"] == 'css')) {
+      $minify = new $minify();
       $minify->add($oldFile);
       $minify->minify($pathPublic.$dir);
     }
@@ -55,7 +56,7 @@ mkdir($pathFolderPublicCss);
 
 $cssDir = scandir($pathFolderResourcesCss);
 
-generete($pathFolderResourcesCss, $pathFolderPublicCss, $cssDir, new Minify\CSS());
+generete($pathFolderResourcesCss, $pathFolderPublicCss, $cssDir, Minify\CSS::class);
 
 /*
  * js generete minify
@@ -67,6 +68,6 @@ $pathFolderPublicJs =  dirname(__DIR__, 1).'/public/assets/js/';
 rrmdir($pathFolderPublicJs);
 mkdir($pathFolderPublicJs);
 
-$cssDir = scandir($pathFolderResourcesJs);
+$jsDir = scandir($pathFolderResourcesJs);
 
-generete($pathFolderResourcesCss, $pathFolderPublicCss, $cssDir, new Minify\Js());
+generete($pathFolderResourcesJs, $pathFolderPublicJs, $jsDir, Minify\Js::class);

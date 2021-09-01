@@ -9,7 +9,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $this->load('pages/home', [
+        return $this->load('pages/home', [
           'title' => 'oi to passando a variavel do controller para o twig'
         ]);
     }
