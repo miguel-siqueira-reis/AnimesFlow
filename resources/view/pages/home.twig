@@ -1,12 +1,19 @@
 {% extends '/layouts/layoutinit.twig' %}
 
 {% block head %}
-
+  <link rel="stylesheet" href="/assets/css/pages/home.css">
 {% endblock %}
 
 {% block titleHead %}title home{% endblock %}
 
 {% block body %}
-  <p>hello, world!!</p>
-  {{ title }}
+  <div class="container">
+    <p>hello, world!!</p>
+    {{ title }}
+  </div>
 {% endblock %}
+
+
+{#
+  connectar o login do usuario com o banco de dados e fazer a verificação e fazer o msm para o cadastro
+ #}

@@ -4,6 +4,8 @@ class MobileNavbar {
         this.navList = document.querySelector(navList);
         this.navLinks = document.querySelectorAll(navLinks);
         this.activeClass = 'active';
+
+        this.init();
     }
 
     init() {
@@ -25,6 +27,3 @@ class MobileNavbar {
     }
 
 }
-const mobileNavbar = new MobileNavbar('#bars', '.header__nav__list', '.header__nav__list__itens');
-
-mobileNavbar.init();

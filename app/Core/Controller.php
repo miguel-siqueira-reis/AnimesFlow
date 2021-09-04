@@ -10,10 +10,13 @@ use Twig\Error\SyntaxError;
 
 class Controller
 {
+  protected string $path = '/../../resources/view/';
+
+
   protected function load(string $view, $params = [])
   {
     $twig = new \Twig\Environment(
-      new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../resources/view/')
+      new \Twig\Loader\FilesystemLoader(__DIR__.$this->path)
     );
 
     $twig->addExtension(new ExtensionTwig());

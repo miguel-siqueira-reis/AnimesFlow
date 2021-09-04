@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\pages;
 
 use App\Core\Controller;
 use App\Http\Response;
 
-class ErrorController extends Controller
+class ErrorController extends PagesController
 {
     public function index($errorCode)
     {

@@ -1,0 +1,72 @@
+{% extends '/layouts/layoutinit.twig' %}
+
+{% block titleHead %}Register{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="/assets/css/pages/register.css">
+{% endblock %}
+
+{% block body %}
+  <div class="background-img">
+    <div class="container">
+      <form action="/register" method="post" class="content_login">
+        <h1 class="content_login__title">AnimesFlow</h1>
+        <h2 class="content_login__subtitle">Register</h2>
+        {{ include('/layouts/components/status/status.twig') }}
+        <div class="content_login__input">
+          <input required name="firstname" maxlength="50" type="text">
+          <label>First Name</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input required name="lastname" maxlength="50" type="text" >
+          <label>Last Name</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input required name="username" maxlength="50" type="text">
+          <label>User Name</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input required name="email" maxlength="50" type="Email">
+          <label>Email</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input required minlength="6" maxlength="50" name="password" type="password" autocomplete="on">
+          <label>Password</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input class="confirm" required minlength="6" maxlength="50" type="password" autocomplete="on">
+          <label>Confirm Password</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <small>
+          <a href="/login" style="color: black">Clicking here to login.</a>
+        </small>
+        <button type="submit" class="content_login__button">Register</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scriptsBody %}
+  <script src="/assets/js/pages/validation.js"></script>
+  <script>
+    const oi = new ValidationForm(false, {
+      confirmPass: (field) => {
+        if (field.type === 'password' && field.classList.contains('confirm')) {
+          const pass = document.querySelectorAll('input[type=password]');
+          if (pass[0].value !== pass[1].value) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }, {
+      confirmPass: (field) => 'As senhas não se condizem'
+    });
+  </script>
+{% endblock %}

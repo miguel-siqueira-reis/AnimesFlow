@@ -24,7 +24,7 @@ class Request {
   /**
    * @return Router
    */
-  public function getRouter(): Router
+  public function getRouter(): Dispatch
   {
     return $this->router;
   }

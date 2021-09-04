@@ -27,7 +27,7 @@ class Queue
     $this->action = $action;
   }
 
-  public function next(Request $request): Response
+  public function next(Request $request)
   {
     if(empty($this->middlewares) && empty($this->action)) return call_user_func_array($this->controller, $this->controllerArgs);
     if(empty($this->middlewares) && !empty($this->action)) return call_user_func_array(array($this->controller, $this->action), $this->controllerArgs);

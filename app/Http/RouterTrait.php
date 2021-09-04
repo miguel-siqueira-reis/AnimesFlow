@@ -12,7 +12,7 @@ trait RouterTrait
   protected function addRoute(string $method, string $route, $callback, string $name = null, $middleware = []): void
   {
     if ($route == "/") {
-      $this->addRoute($method, "", $callback, $name);
+      $this->addRoute($method, "", $callback, $name, $middleware);
     }
 
     $route = $this->group.$route;
@@ -82,6 +82,7 @@ trait RouterTrait
 
   public function redirect($route, $data=null): void
   {
+
     if ($name = $this->route($route, $data)) {
       header("Location: {$name}");
       exit;
@@ -111,7 +112,7 @@ trait RouterTrait
 
   public function treat($route_item, $data): ?string
   {
-    $route = $route_item['route'];
+    $route = $route_item['route'] === '' ? '/' : $route_item['route'];
     if (!empty($data)) {
       $args = [];
       $param = [];

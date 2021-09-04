@@ -11,6 +11,7 @@ class ExtensionTwig extends AbstractExtension implements GlobalsInterface
   public function getGlobals(): array
   {
     return [
+      'BASE_URL' => BASE_URL
     ];
   }
 }

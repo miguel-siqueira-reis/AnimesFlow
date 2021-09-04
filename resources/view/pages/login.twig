@@ -1,0 +1,40 @@
+{% extends '/layouts/layoutinit.twig' %}
+
+{% block titleHead %}Login{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="/assets/css/pages/login.css">
+{% endblock %}
+
+{% block body %}
+  <div class="background-img">
+    <div class="container">
+      <form action="/login" method="post" class="content_login">
+        <h1 class="content_login__title">AnimesFlow</h1>
+        <h2 class="content_login__subtitle">Login</h2>
+        {{ include('/layouts/components/status/status.twig') }}
+        <div class="content_login__input">
+          <input required name="username" maxlength="50" type="text">
+          <label>User Name</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <div class="content_login__input">
+          <input required minlength="3" maxlength="50" name="password" type="password" autocomplete="on">
+          <label>Password</label>
+          <span class="content_login__input__error"></span>
+        </div>
+        <small>
+          <a href="/register" style="color: black">Clicking here to register.</a>
+        </small>
+        <button type="submit" class="content_login__button">Logar</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scriptsBody %}
+  <script src="/assets/js/pages/validation.js"></script>
+  <script>
+    const oi = new ValidationForm(false);
+  </script>
+{% endblock %}
