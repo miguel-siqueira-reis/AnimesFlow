@@ -5,6 +5,13 @@
     box-sizing: border-box;
 }
 
+*, *:before, *:after {
+
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+}
+
 /* Remove default padding */
 ul[class],
 ol[class] {

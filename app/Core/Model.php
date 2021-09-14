@@ -114,7 +114,10 @@ class Model
     if (empty($value)) {
       $value = $param;
       $param = '=';
+    } else if ($param === 'like') {
+      $value = "%{$value}%";
     }
+
     if (empty($this->where)) {
       $this->where = " WHERE {$field} {$param} :".str_replace(".", "_", mb_strtolower($field));
     } else {
@@ -152,7 +155,6 @@ class Model
 
   public function fetch(bool $all = false)
   {
-
     try {
       $stmt = Connection::getInstance()->prepare($this->query . $this->join . $this->where . $this->group . $this->order . $this->limit . $this->offset);
       $stmt->execute($this->params);
@@ -175,7 +177,7 @@ class Model
 
   public function count(): int
   {
-    $stmt = Connection::getInstance()->prepare($this->query);
+    $stmt = Connection::getInstance()->prepare($this->query . $this->join . $this->where . $this->group . $this->order . $this->limit . $this->offset);
     $stmt->execute($this->params);
     return $stmt->rowCount();
   }

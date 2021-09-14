@@ -3,7 +3,7 @@
 :root {
     --primary: #5a18b1;
     --secundary: #410099;
-
+    --borderrgba: rgba(0,0,0,0.2);
 
     --black: black;
     --white: white;
@@ -34,4 +34,8 @@
     background-color: rgba(0, 255, 0, 0.2);
     border: 1px solid green;
     padding: 0.4em;
+}
+
+.btn {
+    cursor: pointer;
 }
