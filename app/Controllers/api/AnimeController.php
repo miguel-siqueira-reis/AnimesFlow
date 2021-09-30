@@ -17,7 +17,7 @@ class AnimeController extends ApiController
 
     $generetePaginator = $this->paginator($model->select(), $request);
 
-    $animes = $generetePaginator['animes'];
+    $animes = $generetePaginator['data'];
 
     $paginator = $generetePaginator['paginator'];
 
@@ -32,33 +32,18 @@ class AnimeController extends ApiController
 
     $generetePaginator = $this->paginator($model->select()->where('name', 'like', $name), $request);
 
-    $animes = $generetePaginator['animes'];
+    $animes = $generetePaginator['data'];
 
     $paginator = $generetePaginator['paginator'];
+
 
     $itens = $this->genereteArrayAnime($animes);
 
     $this->response(200, $itens, 'application/json', $paginator);
   }
 
-  protected function paginator(Model $model, Request $request): array
-  {
-    $queryParams = $request->getQueryParams();
-
-    $page = $queryParams['page'] ?? false;
-    $limit = $queryParams['limit'] ?? 10;
-
-    if ($page) {
-      $paginator = new Paginator($model->count(), (int)$page, (int)$limit);
-      $animes = $model->limit($paginator->limit())->offset($paginator->offset());
-    } else {
-      $animes = $model;
-    }
-
-    return ['animes' => $animes, 'paginator' => $paginator];
-  }
-
-  protected function genereteArrayAnime($animes) {
+  protected function genereteArrayAnime($animes): array {
+    $itens = [];
 
     foreach ($animes->fetch(true) as $objAnime) {
       $itens[] = [

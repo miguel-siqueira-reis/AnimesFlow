@@ -1,21 +1,27 @@
-import {TableUtils} from "../Utils/Table.js";
+import {TableUtilsController} from "../Utils/Table/TableUtilsController.js";
 import {ListTemporadas} from "../model/temporada/ListTemporadas.js";
 import {TemporadaService} from "../services/TemporadaService.js";
 import {TemporadaView} from "../view/TemporadaView.js";
+import {EpisodioController} from "./EpisodioController.js";
 
-export class TemporadaController {
-  constructor(id) {
+export class TemporadaController extends TableUtilsController {
+  constructor(id = false) {
+    super('temporadas', new ListTemporadas(), new TemporadaService(), new TemporadaView('temporadas'));
     this.animeId = id;
-    this.listTemp = new ListTemporadas();
-    this.tempService = new TemporadaService();
-    this.tempView = new TemporadaView('temporadas');
-    this.table = new TableUtils('temporadas', this.listTemp, this.tempService, this.tempView);
+    this.ep = false;
   }
 
-  async createTempTable() {
-    await this.table.createById(this.animeId);
-    await this.table.eventLimit();
-    await this.table.eventPages();
+  async createTempTableById(id = this.animeId) {
+    this.animeId = id;
+    this.ep = new EpisodioController();
+    this.ep.view.clearTable();
+    await this.createById(this.animeId);
+    await this.eventLimit();
+    await this.eventPages();
 
+    await this.eventClick((id) => {
+      this.ep = new EpisodioController();
+      this.ep.createEpTableById(id);
+    }, 'id_anime');
   }
 }

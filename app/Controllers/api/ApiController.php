@@ -3,10 +3,30 @@
 namespace App\Controllers\api;
 
 
+use App\Core\Model;
+use App\Http\Request;
 use App\Http\Response;
+use App\Utils\Paginator;
 
 class ApiController
 {
+  protected function paginator(Model $model, Request $request): array
+  {
+    $queryParams = $request->getQueryParams();
+
+    $page = $queryParams['page'] ?? false;
+    $limit = $queryParams['limit'] ?? 10;
+
+    if ($page) {
+      $paginator = new Paginator($model->count(), (int)$page, (int)$limit);
+      $data = $model->limit($paginator->limit())->offset($paginator->offset());
+    } else {
+      $data = $model;
+    }
+
+    return ['data' => $data, 'paginator' => $paginator];
+  }
+
   protected function response(int $code, $content, string $contentType = 'application/json', $paginator = false)
   {
     if (empty($content)) {

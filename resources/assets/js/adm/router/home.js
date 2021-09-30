@@ -4,4 +4,4 @@ const homeController = new AnimeController();
 
 homeController.createAnimeTable();
 
-// homeController.init();
+// homeController.init();7777

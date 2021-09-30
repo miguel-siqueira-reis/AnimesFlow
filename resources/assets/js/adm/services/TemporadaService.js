@@ -2,7 +2,7 @@ import {Service} from "./Service.js";
 
 export class TemporadaService extends Service {
   constructor() {
-    super('localhost:8080/api/temporadas');
+    super('localhost:8080/api/seasons');
   }
 
   async getByPage(page, limit) {
@@ -13,7 +13,9 @@ export class TemporadaService extends Service {
     return await this.get();
   }
 
-  async getById(id, page=false, limit=false) {
-    return await this.paginator('/'+id, page, limit);
+  async getById(id, pageValue=false, limitValue=false) {
+    let limit = limitValue ? `&limit=${limitValue}` : '';
+    let page = pageValue ? `&page=${pageValue}` : '';
+    return await this.get('?id_anime='+id+page+limit);
   }
 }

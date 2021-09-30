@@ -4,7 +4,6 @@ export class AnimeService extends Service {
   constructor() {
     super('localhost:8080/api/animes');
   }
-
   async getByPage(page, limit) {
     return await this.get(`?page=${page}&limit=${limit}`)
   }
